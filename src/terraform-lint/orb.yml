@@ -1,0 +1,34 @@
+version: 2.1
+
+executors:
+  terraform:
+    docker: [ image: "hashicorp/terraform" ]
+
+jobs:
+  validate:
+    executor: terraform
+    steps:
+      - checkout
+      - run:
+          name: terraform init
+          command: terraform init -input=false
+      - run:
+          name: Validate Terraform configurations
+          command: |
+            find . -type f -name "*.tf" -exec dirname {} \;|sort -u | while read directory; 
+            do 
+              (terraform validate -check-variables=false "$directory" && echo -e "\e[32m√ Files in $directory valid\e[39m") || exit 1 ; 
+            done
+      - run:
+          name: Check if Terraform is properly formatted
+          command: |
+            if [[ -n "$(terraform fmt -write=false)" ]]; then 
+              echo "Some terraform files need be formatted, run 'terraform fmt' to fix"; exit 1; 
+            else
+              echo -e "\e[32m√ Files are formatted\e[39m"; exit 0;
+            fi
+      - run:
+          name: Check Terraform configurations with tflint
+          command: |
+            curl -s -L -o /tmp/tflint.zip https://github.com/wata727/tflint/releases/download/v0.7.2/tflint_linux_amd64.zip && unzip /tmp/tflint.zip -d /usr/local/bin
+            tflint
