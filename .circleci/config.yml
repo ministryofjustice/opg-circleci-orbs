@@ -48,7 +48,7 @@ jobs:
       - circle-compare-url/reconstruct
       - run:
           name: Publish dev releases of any modified orbs
-          command: .scripts/publish_orbs.sh dev_release
+          command: sh scripts/publish_orbs.sh dev_release
 
   dev-promote-patch:
     executor: cli
@@ -57,4 +57,4 @@ jobs:
       - circle-compare-url/reconstruct
       - run:
           name: Publish any modified orbs
-          command: scripts/publish.sh patch_release
+          command: sh scripts/publish.sh patch_release
