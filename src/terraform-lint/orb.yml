@@ -16,15 +16,15 @@ jobs:
       - run:
           name: Validate Terraform configurations
           command: |
-            find . -type f -name "*.tf" -exec dirname {} \;|sort -u | while read directory; 
-            do 
-              (terraform validate -check-variables=false "$directory" && echo -e "\e[32m√ Files in $directory valid\e[39m") || exit 1 ; 
+            find . -type f -name "*.tf" -exec dirname {} \;|sort -u | while read directory;
+            do
+              (terraform validate -check-variables=false "$directory" && echo -e "\e[32m√ Files in $directory valid\e[39m") || exit 1;
             done
       - run:
           name: Check if Terraform is properly formatted
           command: |
-            if [[ -n "$(terraform fmt -write=false)" ]]; then 
-              echo "Some terraform files need be formatted, run 'terraform fmt' to fix"; exit 1; 
+            if [[ -n "$(terraform fmt -write=false)" ]]; then
+              echo "Some terraform files need be formatted, run 'terraform fmt' to fix"; exit 1;
             else
               echo -e "\e[32m√ Files are formatted\e[39m"; exit 0;
             fi

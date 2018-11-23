@@ -17,7 +17,7 @@ workflows:
       - lint
       - build
       - dev-release:
-          requires: [ build, lint ]
+          requires: [build, lint]
 
       - hold:
           type: approval
@@ -25,15 +25,15 @@ workflows:
             branches:
               only: master
       - dev-promote-patch:
-          requires: [ hold ]
+          requires: [hold]
 
 jobs:
   lint:
-    docker: [ image: singapore/lint-condo ]
+    docker: [image: singapore/lint-condo]
     steps:
       - checkout
       - run:
-          'yamllint .'
+          'yamllint -c yamllint.yaml .'
   build:
     executor: cli
     steps:
