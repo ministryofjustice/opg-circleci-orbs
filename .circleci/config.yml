@@ -7,7 +7,8 @@ orbs:
 
 executors:
   cli:
-    docker: [image: circleci/circleci-cli:0.1.2709]
+    docker:
+      - image: circleci/circleci-cli:0.1.2709
 
 workflows:
   version: 2
@@ -37,7 +38,7 @@ jobs:
     executor: cli
     steps:
       - checkout
-      - run: 
+      - run:
           name: Validate Orbs
           command: "sh scripts/validate-orbs.sh"
   dev-release:

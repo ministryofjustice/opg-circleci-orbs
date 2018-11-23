@@ -3,7 +3,7 @@ version: 2.1
 
 executors:
   terraform:
-    docker: [ image: "hashicorp/terraform" ]
+    docker: [image: "hashicorp/terraform"]
 
 jobs:
   validate:
