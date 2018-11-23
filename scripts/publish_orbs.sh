@@ -9,7 +9,7 @@ echo "Commit range: ${COMMIT_RANGE:?}"
 
 for ORB in src/*/; do
   orbname=$(basename ${ORB:?})
-  if [[ $(git diff $COMMIT_RANGE --name-status | grep "${orbname:?}") ]]; then
+  if [[ $(git diff $COMMIT_RANGE --name-status | grep "${orbname:?}") ]];then
 
     if [[ $ACTION == "dev_release" ]];then
       (ls ${ORB:?}orb.yml && echo "orb.yml found, attempting to publish...") || echo "No orb.yml file was found - the next line is expected to fail."
