@@ -1,3 +1,4 @@
+---
 version: 2.1
 
 orbs:
@@ -6,7 +7,7 @@ orbs:
 
 executors:
   cli:
-    docker: [ image: circleci/circleci-cli:0.1.2709 ]
+    docker: [image: circleci/circleci-cli:0.1.2709]
 
 workflows:
   version: 2
@@ -36,8 +37,9 @@ jobs:
     executor: cli
     steps:
       - checkout
-      - run: "echo -e \"token: placeholder\nverbose: false > ~/.circleci/cli.yml\""
-      - run: "sh scripts/validate-orbs.sh"
+      - run: 
+          name: Validate Orbs
+          command: "sh scripts/validate-orbs.sh"
   dev-release:
     executor: cli
     steps:
@@ -45,26 +47,7 @@ jobs:
       - circle-compare-url/reconstruct
       - run:
           name: Publish dev releases of any modified orbs
-          command: |
-            # save value stored in file to a local env var
-            CIRCLE_COMPARE_URL=$(cat CIRCLE_COMPARE_URL.txt)
-
-            COMMIT_RANGE=$(echo $CIRCLE_COMPARE_URL | sed 's:^.*/compare/::g')
-
-            echo "Commit range: $COMMIT_RANGE"
-
-            for ORB in src/*/; do
-              orbname=$(basename $ORB)
-              if [[ $(git diff $COMMIT_RANGE --name-status | grep "$orbname") ]]; then
-
-                (ls ${ORB}orb.yml && echo "orb.yml found, attempting to publish...") || echo "No orb.yml file was found - the next line is expected to fail."
-
-                circleci orb publish ${ORB}orb.yml circleci/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1} --token $CIRCLECI_API_TOKEN
-              else
-                echo "${orbname} not modified; no need to promote"
-              fi
-              echo "------------------------------------------------------"
-            done
+          command: .scripts/publish_orbs.sh
 
   dev-promote-patch:
     executor: cli
