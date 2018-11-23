@@ -15,16 +15,16 @@ workflows:
   main:
     jobs:
       - lint
-      - build
+      - validate-orbs
       - dev-release:
-          requires: [build, lint]
+          requires: [validate-orbs,lint]
 
       - hold:
           type: approval
           filters:
             branches:
               only: master
-      - dev-promote-patch:
+      - dev-patch-release:
           requires: [hold]
 
 jobs:
@@ -34,7 +34,7 @@ jobs:
       - checkout
       - run:
           'yamllint -c yamllint.yaml .'
-  build:
+  validate-orbs:
     executor: cli
     steps:
       - checkout
@@ -49,8 +49,7 @@ jobs:
       - run:
           name: Publish dev releases of any modified orbs
           command: ./scripts/publish_orbs.sh dev_release
-
-  dev-promote-patch:
+  dev-patch-release:
     executor: cli
     steps:
       - checkout
