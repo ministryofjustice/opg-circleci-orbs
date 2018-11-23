@@ -1,4 +1,6 @@
-#!/bin/bash -eo pipefail
+#!/usr/bin/env bash
+set -eo pipefail
+
 ACTION=${1:?}
 # save value stored in file to a local env var
 CIRCLE_COMPARE_URL=$(cat CIRCLE_COMPARE_URL.txt)
