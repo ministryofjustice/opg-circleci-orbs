@@ -70,7 +70,7 @@ jobs:
     executor: cli
     steps:
       - checkout
-      - circle-compare-url/reconstructw
+      - circle-compare-url/reconstruct
       - run:
           name: Publish any modified orbs
           shell: /bin/bash -exo pipefail
