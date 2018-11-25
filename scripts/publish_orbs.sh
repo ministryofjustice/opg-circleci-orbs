@@ -15,10 +15,10 @@ for ORB in src/*/; do
 
     if [[ $ACTION == "dev_release" ]];then
       (ls ${ORB:?}orb.yml && echo "orb.yml found, attempting to publish...") || echo "No orb.yml file was found - the next line is expected to fail."
-      circleci orb publish ${ORB}orb.yml circleci/${orbname}@dev:${CIRCLE_BRANCH:?}-${CIRCLE_SHA1:?} --token ${CIRCLECI_API_TOKEN:?}
+      circleci orb publish ${ORB}orb.yml ministyofjustice/${orbname}@dev:${CIRCLE_BRANCH:?}-${CIRCLE_SHA1:?} --token ${CIRCLECI_API_TOKEN:?}
     elif [[ $ACTION == "patch_release" ]];then
       echo "promoting circleci/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1} as patch release"
-      circleci orb publish promote circleci/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1} patch --token $CIRCLECI_API_TOKEN
+      circleci orb publish promote ministyofjustice/${orbname}@dev:${CIRCLE_BRANCH}-${CIRCLE_SHA1} patch --token $CIRCLECI_API_TOKEN
     fi
 
   else
