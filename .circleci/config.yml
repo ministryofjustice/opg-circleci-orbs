@@ -16,16 +16,16 @@ workflows:
     jobs:
       - lint
       - validate-orbs
-      - dev-release:
-          requires: [validate-orbs,lint]
+      # - dev-release:
+      #     requires: [validate-orbs,lint]
 
-      - hold:
-          type: approval
-          filters:
-            branches:
-              only: master
-      - dev-patch-release:
-          requires: [hold]
+      # - hold:
+      #     type: approval
+      #     filters:
+      #       branches:
+      #         only: master
+      # - dev-patch-release:
+      #     requires: [hold]
 
 jobs:
   lint:
