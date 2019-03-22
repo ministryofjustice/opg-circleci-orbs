@@ -1,0 +1,59 @@
+---
+version: 2.1
+
+orbs:
+  slack: circleci/slack@volatile
+  circle-compare-url: iynere/compare-url@0.1.0
+
+executors:
+  cli:
+    docker:
+      - image: circleci/circleci-cli:0.1.2709
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - lint
+      - validate-orbs
+      # - dev-release:
+      #     requires: [validate-orbs,lint]
+
+      # - hold:
+      #     type: approval
+      #     filters:
+      #       branches:
+      #         only: master
+      # - dev-patch-release:
+      #     requires: [hold]
+
+jobs:
+  lint:
+    docker: [image: singapore/lint-condo]
+    steps:
+      - checkout
+      - run:
+          'yamllint -c yamllint.yaml .'
+  validate-orbs:
+    executor: cli
+    steps:
+      - checkout
+      - run:
+          name: Validate Orbs
+          command: ./scripts/validate-orbs.sh
+  dev-release:
+    executor: cli
+    steps:
+      - checkout
+      - circle-compare-url/reconstruct
+      - run:
+          name: Publish dev releases of any modified orbs
+          command: ./scripts/publish_orbs.sh dev_release
+  dev-patch-release:
+    executor: cli
+    steps:
+      - checkout
+      - circle-compare-url/reconstruct
+      - run:
+          name: Publish any modified orbs
+          command: ./scripts/publish.sh patch_release

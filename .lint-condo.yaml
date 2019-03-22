@@ -1,0 +1,9 @@
+---
+linters:
+  # YAML
+  - yamllint -c yamllint.yaml .
+
+  # Markdown
+  - proselint *.md
+  - remark *.md --quiet --frail --no-stdout
+  - write-good *.md || true
